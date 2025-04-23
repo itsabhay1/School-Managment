@@ -7,18 +7,16 @@ dotenv.config({
 
 let db;
 
-try {
-    db = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
-    });
+const connectToDatabase = async () => {
+    try {
+        db = await mysql.createConnection(process.env.MYSQL_URL);
+        console.log('Connected to the database');
+    } catch (error) {
+        console.error('Failed to connect to the database:', error.message);
+        process.exit(1);
+    }
+};
 
-    console.log('Connected to the database');
-} catch (error) {
-    console.error('Failed to connect to the database:', error.message);
-    process.exit(1);
-}
+await connectToDatabase();
 
 export default db;
